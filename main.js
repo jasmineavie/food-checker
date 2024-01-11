@@ -21,13 +21,16 @@ fetch(url)
     console.log(data)
     if(data.status === 1){
         const item = new ProductInfo(data.product)
+
         item.showInfo()
+        item.listIngredients()
 
 
     } else if(data.status === 0){
         alert(`Product ${barcode} not found. Please try another!`)
     }
 })
+
 .catch(err => {
     console.log(`error ${err}`)
 })
@@ -57,13 +60,27 @@ showInfo(){
 listIngredients(){
     let tableRef = document.getElementById("ingredient-table")
 
+    for(let i = 1; i < tableRef.rows.length;){
+        tableRef.deleteRow(i);
+    }
+
+    if(!(this.ingredients == null)) {
+
 
     for(let key in this.ingredients){
         let newRow = tableRef.insertRow(-1)
         let newCell1 = newRow.insertCell(0)
         let newCell2 = newRow.insertCell(1)
+        let newIngText = document.createTextNode(
+            this.ingredients[key].text
+        )
+        let vegStatus = !(this.ingredients[key].vegetarian) ? "unknown" : this.ingredients[key].vegetarian
+        let newVtext = document.createTextNode(vegStatus)
+        newCell1.appendChild(newIngText)
+        newCell2.appendChild(newVtext)
+
     }
 }
-
+}
 
 }
